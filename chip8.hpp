@@ -1,5 +1,11 @@
 #include <stdio.h>
 
+#define SCREEN_HEIGHT 32
+#define SCREEN_WIDTH 64
+#define SCALE 8
+
+#define MAX_ROM_SIZE 4096 - 512
+
 /*
     0x000-0x1FF - Chip 8 interpreter (contains font set in emu)
     0x050-0x0A0 - Used for the built in 4x5 pixel font set (0-F)
@@ -16,7 +22,7 @@ class Chip8 {
 
         unsigned char memory[4096];
         unsigned char V[16]; // Registers V0 - VF
-        unsigned char gfx[64 * 32];
+        unsigned char gfx[SCREEN_WIDTH * SCREEN_HEIGHT];
         unsigned char delay_timer;
         unsigned char sound_timer;
         unsigned char keypad[16];

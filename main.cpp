@@ -7,9 +7,6 @@ Chip8 chip8;
 SDL_Window *window;
 SDL_Renderer *renderer;
 
-#define SCREEN_HEIGHT 32
-#define SCREEN_WIDTH 64
-#define SCALE 8
 
 void init_SDL()
 {
@@ -43,6 +40,16 @@ void drawGraphics()
 {
 }
 
+void drawGraphicsTerminal()
+{
+    // For debugging purposes, draw graphics to the terminal.
+    for (int c = 0; c < SCREEN_WIDTH; c++) {
+        for (int r = 0; r < SCREEN_HEIGHT; r++)
+            printf(chip8.gfx[(r*c)+c] == 1 ? "█" : " ");
+        printf("\n");
+    }
+}
+
 int main(int argc, char *argv[])
 {
     if (argc == 1) {
@@ -51,9 +58,11 @@ int main(int argc, char *argv[])
     } else {
         // Initialize Chip8 processor
         chip8.initialize();
+        // Load rom
         if (chip8.loadGame(argv[1]) == EXIT_FAILURE) {
-            printf("Chip-8: Not a valid ROM file.\n");
             exit(EXIT_FAILURE);
+        } else {
+            printf("Chip-8: Loaded rom");
         }
     }
 
@@ -62,17 +71,19 @@ int main(int argc, char *argv[])
 
     // Initialize Input
 
-    SDL_Event e;
+    SDL_Event event;
     bool quit = false;
     while (!quit){
-        while (SDL_PollEvent(&e)){
-            if (e.type == SDL_QUIT){
+        chip8.emulateCycle();
+        if (chip8.drawFlag) drawGraphicsTerminal();
+        while (SDL_PollEvent(&event)){
+            if (event.type == SDL_QUIT){
                 quit = true;
             }
-            if (e.type == SDL_KEYDOWN){
+            if (event.type == SDL_KEYDOWN){
                 quit = true;
             }
-            if (e.type == SDL_MOUSEBUTTONDOWN){
+            if (event.type == SDL_MOUSEBUTTONDOWN){
                 quit = true;
             }
         }
