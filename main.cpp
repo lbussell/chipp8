@@ -46,18 +46,21 @@ void drawGraphics()
 int main(int argc, char *argv[])
 {
     if (argc == 1) {
-        printf("No filename given...\n");
+        printf("Chip-8: No filename given...\n");
         return EXIT_SUCCESS;
+    } else {
+        // Initialize Chip8 processor
+        chip8.initialize();
+        if (chip8.loadGame(argv[1]) == EXIT_FAILURE) {
+            printf("Chip-8: Not a valid ROM file.\n");
+            exit(EXIT_FAILURE);
+        }
     }
 
     // Initialize graphics
     init_SDL();
 
     // Initialize Input
-
-    // Initialize Chip8 processor
-    chip8.initialize();
-    chip8.loadGame(argv[1]);
 
     SDL_Event e;
     bool quit = false;

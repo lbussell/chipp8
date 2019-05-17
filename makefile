@@ -1,5 +1,5 @@
 appname := chip8
-CXX := gcc
+CXX := g++
 CXXFLAGS := -Wall -g
 # -I/usr/local/include -L/usr/local/lib -lSDL2
 # For macOS
